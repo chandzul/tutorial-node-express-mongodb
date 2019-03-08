@@ -35,11 +35,11 @@ app.delete('/', (req, res) => {
 // fin ejemplo de como implementar metodos CRUD
 
 // blueprint para un middleware propio
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     // req.me = models.users[1];
     req.context = {
         models,
-        me: models.users[1],
+        me: await models.User.findByLogin('rwieruch'),
     };
   
     // do something
@@ -68,7 +68,7 @@ connectDb().then(async () => {
      }
 
     app.listen(process.env.PORT, () =>
-        console.log(`Example app listening on port ${process.env.PORT}!`),
+        console.log(`Example app listening on http://localhost:${process.env.PORT}!`),
     );
 });
 
@@ -80,7 +80,11 @@ const createUsersWithMessages = async () => {
     });
 
     const user2 = new models.User({
-        username: 'ddavids',
+        username: 'davids',
+    });
+
+    const user3 = new models.User({
+        username: 'chandzul',
     });
 
     // seed crear mensaje de un usuario en la bd
@@ -105,4 +109,5 @@ const createUsersWithMessages = async () => {
 
     await user1.save();
     await user2.save();
+    await user3.save();
 };
